@@ -41,14 +41,14 @@ public class DataGenerator {
     public static String getRandomLogin() {
         // TODO: добавить логику для объявления переменной login и задания её значения, для генерации
         //  случайного логина используйте faker
-        String login = faker.name().firstName();
+        String login = faker.name().username();
         return login;
     }
 
     public static String getRandomPassword() {
         // TODO: добавить логику для объявления переменной password и задания её значения, для генерации
         //  случайного пароля используйте faker
-        String password = faker.code().imei();
+        String password = faker.internet().password();
         return password;
     }
 

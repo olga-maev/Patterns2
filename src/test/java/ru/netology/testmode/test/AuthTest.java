@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.testmode.data.DataGenerator;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.testmode.data.DataGenerator.Registration.getRegisteredUser;
@@ -27,10 +29,10 @@ class AuthTest {
         // TODO: добавить логику теста, в рамках которого будет выполнена попытка входа в личный кабинет с учётными
         //  данными зарегистрированного активного пользователя, для заполнения полей формы используйте
         //  пользователя registeredUser
-        $("[data-test-id=login] input").setValue(registeredUser.getLogin());
-        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
-        $("[data-test-id=action-login]").click();
-        $("h2").shouldHave(Condition.text("Личный кабинет")).shouldBe(Condition.visible);
+        $("[data-test-id='login'] input").setValue(registeredUser.getLogin());
+        $("[data-test-id='password'] input").setValue(registeredUser.getPassword());
+        $("button.button").click();
+        $("h2").shouldHave(Condition.exactText("Личный кабинет")).shouldBe(Condition.visible);
     }
 
     @Test
@@ -39,11 +41,11 @@ class AuthTest {
         var notRegisteredUser = getUser("active");
         // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет
         //  незарегистрированного пользователя, для заполнения полей формы используйте пользователя notRegisteredUser
-        $("[data-test-id=login] input").setValue(notRegisteredUser.getLogin());
-        $("[data-test-id=password] input").setValue(notRegisteredUser.getPassword());
-        $("[data-test-id=action-login]").click();
+        $("[data-test-id='login'] input").setValue(notRegisteredUser.getLogin());
+        $("[data-test-id='password'] input").setValue(notRegisteredUser.getPassword());
+        $("button.button").click();
         $("[data-test-id=error-notification]")
-                .shouldHave(Condition.text("Неверно указан логин или пароль"))
+                .shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"))
                 .shouldBe(Condition.visible);
     }
 
@@ -55,10 +57,10 @@ class AuthTest {
         //  заблокированного пользователя, для заполнения полей формы используйте пользователя blockedUser
         $("[data-test-id=login] input").setValue(blockedUser.getLogin());
         $("[data-test-id=password] input").setValue(blockedUser.getPassword());
-        $("[data-test-id=action-login]").click();
+        $("button.button").click();
         $("[data-test-id=error-notification]")
-                .shouldHave(Condition.text("Неверно указан логин или пароль"))
-                .shouldBe(Condition.visible);
+                .shouldHave(Condition.exactText("Ошибка! Пользователь заблокирован"))
+                .shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     @Test
@@ -71,9 +73,9 @@ class AuthTest {
         //  "Пароль" - пользователя registeredUser
         $("[data-test-id=login] input").setValue(wrongLogin);
         $("[data-test-id=password] input").setValue(registeredUser.getPassword());
-        $("[data-test-id=action-login]").click();
+        $("button.button").click();
         $("[data-test-id=error-notification]")
-                .shouldHave(Condition.text("Неверно указан логин или пароль"))
+                .shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"))
                 .shouldBe(Condition.visible);
     }
 
@@ -87,9 +89,9 @@ class AuthTest {
         //  "Пароль" - переменную wrongPassword
         $("[data-test-id=login] input").setValue(registeredUser.getLogin());
         $("[data-test-id=password] input").setValue(wrongPassword);
-        $("[data-test-id=action-login]").click();
+        $("button.button").click();
         $("[data-test-id=error-notification]")
-                .shouldHave(Condition.text("Неверно указан логин или пароль"))
+                .shouldHave(Condition.exactText("Ошибка! Неверно указан логин или пароль"))
                 .shouldBe(Condition.visible);
     }
 }
